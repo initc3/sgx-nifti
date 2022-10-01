@@ -11,7 +11,7 @@ in this repository try to use packages installed via `pip` instead.
 
 
 ## Prerequisites
-Omly tested on Ubuntu. (Should work on Debian.)
+Only tested on Ubuntu. (Should work on Debian.)
 
 To try the "mvp" (minimal viable prototype), you need an SGX enabled machine,
 and to install gramine.
