@@ -5,34 +5,42 @@ libos.entrypoint = "{{ entrypoint }}"
 
 loader.log_level = "{{ log_level }}"
 
-loader.env.LD_LIBRARY_PATH = "{{ python.stdlib }}/lib:/lib:{{ arch_libdir }}:/usr/lib:/usr/{{ arch_libdir }}"
+loader.env.LD_LIBRARY_PATH = "/lib:{{ arch_libdir }}:/usr/lib:/usr/{{ arch_libdir }}"
 
 loader.insecure__use_cmdline_argv = true
 
 sys.enable_sigterm_injection = true
 
 fs.mounts = [
-  { path = "/lib", uri = "file:{{ gramine.runtimedir() }}" },
-  { path = "{{ arch_libdir }}", uri = "file:{{ arch_libdir }}" },
-  { path = "/usr", uri = "file:/usr" },
-  { path = "{{ python.stdlib }}", uri = "file:{{ python.stdlib }}" },
-  { path = "{{ python.distlib }}", uri = "file:{{ python.distlib }}" },
-  { path = "/etc", uri = "file:/etc" },
+  { uri = "file:{{ gramine.runtimedir() }}", path = "/lib" },
+  { uri = "file:{{ arch_libdir }}", path = "{{ arch_libdir }}" },
+  { uri = "file:/usr/{{ arch_libdir }}", path = "/usr/{{ arch_libdir }}" },
+  { uri = "file:{{ entrypoint }}", path = "{{ entrypoint }}"  },
+  { uri = "file:{{ python_stdlib }}", path = "{{ python_stdlib }}"  },
+  { uri = "file:{{ venvlib }}/dicom2nifti", path = "{{ python_stdlib }}/dicom2nifti" },
+  { uri = "file:{{ venvlib }}/nibabel", path = "{{ python_stdlib }}/nibabel" },
+  { uri = "file:{{ venvlib }}/pydicom", path = "{{ python_stdlib }}/pydicom" },
+  { uri = "file:{{ venvlib }}/packaging", path = "{{ python_stdlib }}/packaging" },
+  { uri = "file:{{ venvlib }}/pkg_resources", path = "{{ python_stdlib }}/pkg_resources" },
+  { uri = "file:{{ venvlib }}/numpy", path = "{{ python_stdlib }}/numpy" },
+  { uri = "file:{{ venvlib }}/numpy.libs", path = "{{ python_stdlib }}/numpy.libs" },
+  { uri = "file:{{ venvlib }}/scipy", path = "{{ python_stdlib }}/scipy" },
+  { uri = "file:{{ venvlib }}/scipy.libs", path = "{{ python_stdlib }}/scipy.libs" },
+  { uri = "file:/etc", path = "/etc" },
+  { uri = "file:/opt/data", path = "/opt/data" },
 
   { type = "tmpfs", path = "/tmp" },
 ]
 
-sys.stack.size = "2M"
-sys.enable_extra_runtime_domain_names_conf = true
-
 sgx.debug = true
 sgx.nonpie_binary = true
 sgx.enclave_size = "512M"
+sys.stack.size = "2M"
 sgx.thread_num = 32
 
-sgx.remote_attestation = "{{ ra_type }}"
-sgx.ra_client_spid = "{{ ra_client_spid }}"
-sgx.ra_client_linkable = {{ 'true' if ra_client_linkable == '1' else 'false' }}
+sgx.remote_attestation = true
+sgx.ra_client_spid = "{{ env.get('RA_CLIENT_SPID', '') }}"
+sgx.ra_client_linkable = {{ 'true' if env.get('RA_CLIENT_LINKABLE', '0') == '1' else 'false' }}
 
 sgx.trusted_files = [
   "file:{{ gramine.libos }}",
@@ -40,11 +48,13 @@ sgx.trusted_files = [
   "file:{{ gramine.runtimedir() }}/",
   "file:{{ arch_libdir }}/",
   "file:/usr/{{ arch_libdir }}/",
-  "file:{{ python.stdlib }}/",
-  "file:{{ python.distlib }}/",
+  "file:{{ entrypoint }}/",
+  "file:{{ python_stdlib }}/",
+  "file:{{ venvlib }}/",
   "file:scripts/",
+  "file:/opt/data/in/dicom/",
+  "file:/opt/data/in/nifti/",
   "file:/etc/mime.types",
-  "file:/etc/default/apport",
 ]
 
 sgx.allowed_files = [
@@ -55,4 +65,6 @@ sgx.allowed_files = [
   "file:/etc/passwd",
   "file:/etc/gai.conf",
   "file:/etc/host.conf",
+  "file:/etc/resolv.conf",
+  "file:/opt/data/out/",
 ]

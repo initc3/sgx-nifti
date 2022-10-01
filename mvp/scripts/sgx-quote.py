@@ -8,11 +8,8 @@ def tohex(b):
 
 if not os.path.exists("/dev/attestation/user_report_data"):
     print("Cannot find `/dev/attestation/user_report_data`; "
-          "are you running under SGX, with remote attestation enabled?")
+          "are you running under SGX?")
     sys.exit(1)
-
-with open('/dev/attestation/attestation_type') as f:
-    print(f"Detected attestation type: {f.read()}")
 
 with open("/dev/attestation/user_report_data", "wb") as f:
     f.write(b'\0'*64)
@@ -29,3 +26,6 @@ print(f"  ISVPRODID:        {quote[304:306].hex()}")
 print(f"  ISVSVN:           {quote[306:308].hex()}")
 print(f"  REPORTDATA:       {quote[368:400].hex()}")
 print(f"                    {quote[400:432].hex()}")
+
+print(f"QUOTE HEX: \n {quote.hex()}")
+print(f"QUOTE bytes: \n {quote}")

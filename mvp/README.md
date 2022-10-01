@@ -1,5 +1,10 @@
 # Python example
 
+> **Warning**: Please see the [original repository][gramine] for a more reliable
+reference. This fork is experimental and tries to work with Python packages that
+are installed under a virtual environment rather than under the Debian location,
+i.e.: (`/usr/lib/python3/dist-packages`)
+
 This directory contains an example for running Python 3 in Gramine, including
 the Makefile and a template for generating the manifest.
 
@@ -10,7 +15,7 @@ the Makefile and a template for generating the manifest.
 For generating the manifest and running the test scripts, please run the following
 command to install the required packages (Ubuntu-specific):
 
-    sudo apt-get install libnss-mdns python3-numpy python3-scipy
+    sudo apt-get install libnss-mdns
 
 ## Building for Linux
 
@@ -35,6 +40,7 @@ additionally need to provide an SPID and specify whether it is set up for
 linkable quotes or not:
 
 ```
+
 make SGX=1 RA_TYPE=epid RA_CLIENT_SPID=12345678901234567890123456789012 \
     RA_CLIENT_LINKABLE=0
 ```
@@ -49,16 +55,13 @@ run `sgx-quote.py` and verify the output, you will need to provide an
 
 Here's an example of running Python scripts under Gramine:
 ```
-gramine-sgx ./python scripts/helloworld.py
 gramine-sgx ./python scripts/test-numpy.py
 gramine-sgx ./python scripts/test-scipy.py
 gramine-sgx ./python scripts/sgx-quote.py
 ```
 
-You can also manually run included tests:
-```
-SGX=1 ./run-tests.sh
-```
-
 To run Gramine in non-SGX (direct) mode, replace `gramine-sgx` with
 `gramine-direct` and remove `SGX=1` in the commands above.
+
+
+[gramine]: https://github.com/gramineproject/gramine/tree/master/CI-Examples/python
