@@ -6,10 +6,10 @@ else
 GRAMINE_LOG_LEVEL = error
 endif
 
-PY_VERSION = python3.10
-PY_STDLIB = /usr/lib/${PY_VERSION}
-VENV_PATH = ${HOME}/.venvs/nifti
-VENV_LIB ?= $(shell ${VENV_PATH}/bin/python -m pip show dicom2nifti | grep Location: | cut -d" " -f2)
+PYTHON ?= python3.10
+PY_STDLIB = /usr/lib/${PYTHON}
+VENV_PATH ?= ${HOME}/.venvs/nifti
+VENV_LIB = $(shell ${VENV_PATH}/bin/python -m pip show dicom2nifti | grep Location: | cut -d" " -f2)
 
 .PHONY: all
 all: python.manifest
@@ -23,7 +23,7 @@ python.manifest: python.manifest.template
 		-Darch_libdir=$(ARCH_LIBDIR) \
 		-Dpython_stdlib=${PY_STDLIB} \
 		-Dvenvlib=$(VENV_LIB) \
-		-Dentrypoint=$(realpath $(shell sh -c "command -v ${PY_VERSION}")) \
+		-Dentrypoint=$(realpath $(shell sh -c "command -v ${PYTHON}")) \
 		$< >$@
 
 # Make on Ubuntu <= 20.04 doesn't support "Rules with Grouped Targets" (`&:`),
