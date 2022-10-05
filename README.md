@@ -19,23 +19,32 @@ and to install gramine.
 **TODO**: minimal instructions on installing gramine
 
 ## Down the rabbit hole
-0. Create a virual environment like so:
+0. Create a virual environment, e.g.:
 
 ```
 python3.10 -m venv ~/.venvs/nifti
 ```
 
-1. Copy the `data` directory under `/opt` and give set file permissions
+1. Install `dicom2nifti` in the virtual environment, e.g.:
+
+```
+source ~/.venvs/nifti/bin/activate \
+    && pip install dicom2nifti \
+    && deactivate
+```
+
+2. Copy the `data` directory under `/opt` and give set file permissions
    to your user, e.g.:
 
 ```
 chown -R `id -un`:`id -gn` /opt/data
 ```
 
-2. Generate the `python.manifest.sgx` file:
+3. Generate the `python.manifest.sgx` file:
 
 ```
-RA_CLIENT_SPID=12345678901234567890123456789012 RA_CLIENT_LINKABLE=0 make SGX=1 DEBUG=1
+make SGX=1 PYTHON=python3.10 VENV_PATH=~/.venvs/nifti \
+    RA_CLIENT_SPID=12345678901234567890123456789012 RA_CLIENT_LINKABLE=0
 ```
 
 3. Convert the dicom images to nifti:
