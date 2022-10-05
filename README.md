@@ -18,14 +18,16 @@ and to install gramine.
 
 **TODO**: minimal instructions on installing gramine
 
-## Down the rabbit hole
-0. Create a virual environment, e.g.:
+## Quick Demo
+0. Clone this repository.
+
+1. Create a virual environment, e.g.:
 
 ```
 python3.10 -m venv ~/.venvs/nifti
 ```
 
-1. Install `dicom2nifti` in the virtual environment, e.g.:
+2. Install `dicom2nifti` in the virtual environment, e.g.:
 
 ```
 source ~/.venvs/nifti/bin/activate \
@@ -33,39 +35,41 @@ source ~/.venvs/nifti/bin/activate \
     && deactivate
 ```
 
-2. Copy the `data` directory under `/opt` and give set file permissions
-   to your user, e.g.:
+3. From the root of this repo, copy the `data` directory under `/opt` and give
+   set file permissions to your user, e.g.:
 
 ```
 chown -R `id -un`:`id -gn` /opt/data
 ```
 
-3. Generate the `python.manifest.sgx` file:
-
+4. From the `mvp` directory, generate the `python.manifest.sgx` file:
+```
+cd mvp
+```
 ```
 make SGX=1 PYTHON=python3.10 VENV_PATH=~/.venvs/nifti \
     RA_CLIENT_SPID=12345678901234567890123456789012 RA_CLIENT_LINKABLE=0
 ```
 
-3. Convert the dicom images to nifti:
+5. Convert the dicom images to nifti:
 
 ```
 gramine-sgx ./python scripts/test-dicom2nifti.py
 ```
 
-4. Check that the output file is there:
+6. Check that the output file is there:
 
 ```
 ls -l /opt/data/out/nifti/
 ```
 
-5. Slice a nifti image:
+7. Slice a nifti image:
 
 ```
 gramine-sgx ./python scripts/test-nibabel.py
 ```
 
-6. Check the output:
+8. Check the output:
 ```
 ls -l /opt/data/out/nifti/
 ```
