@@ -288,9 +288,9 @@ report_body[320:384].hex()  # report data
 
 
 ## TODO
-* Add instructions on how to get the quote and do the remote attestation.
-* Encrypt the files before processing them in SGX. iInput files should only be
-decrypted within SGX.
+* Encrypt the files before processing them in SGX. Input files should only be
+  decrypted within SGX.
+* Provide a Dockerfile for easier setup.
 * ...
 
 [gramine]: https://gramine.readthedocs.io/en/latest/quickstart.html#install-gramine
