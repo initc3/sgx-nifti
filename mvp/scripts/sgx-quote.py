@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+import base64
 import os
 import sys
 
@@ -27,5 +28,4 @@ print(f"  ISVSVN:           {quote[306:308].hex()}")
 print(f"  REPORTDATA:       {quote[368:400].hex()}")
 print(f"                    {quote[400:432].hex()}")
 
-print(f"QUOTE HEX: \n {quote.hex()}")
-print(f"QUOTE bytes: \n {quote}")
+print(f"QUOTE base 64: \n {base64.b64encode(quote).decode()}")
