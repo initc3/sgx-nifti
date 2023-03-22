@@ -17,7 +17,7 @@ out-of-tree (OOT) SGX driver.
 To try the "mvp" (minimal viable prototype), you need:
 
 * An SGX enabled machine
-* To Install [gramine](gramine)
+* To Install [gramine][gramine]
 
 To perform remote attestation:
 
